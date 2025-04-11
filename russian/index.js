@@ -72,24 +72,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   }, 500);
   
   // Search logic
-  async function handleSearch(query = searchInput.value.trim().toLowerCase()) {
-    if (!query) return;
-    
-    let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-    recentSearches = [query, ...recentSearches.filter(q => q !== query)].slice(0, 10);
-    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
-    
-    const results = await searchWords(query);
-    homeCards.classList.add('hidden');
-    resultArea.classList.remove('hidden');
-    clearSearchBtn.classList.remove('hidden');
-    
-    if (results.length === 0) {
-      resultArea.innerHTML = `<p class="text-center text-gray-500 mt-4">No results found</p>`;
-    } else {
-      renderSearchResults(results);
-    }
+async function handleSearch(query = searchInput.value.trim().toLowerCase()) {
+  if (!query) return;
+
+  let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+  recentSearches = [query, ...recentSearches.filter(q => q !== query)].slice(0, 10);
+  localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+  refreshRecentList();
+  
+  function refreshRecentList() {
+  const recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+  const recentList = document.getElementById('recentList');
+  if (recentSearches.length > 0) {
+    recentList.innerHTML = recentSearches.slice(0, 5).map(term =>
+      `<li class="text-blue-600 hover:underline cursor-pointer" data-term="${term}">${term}</li>`
+    ).join('');
+  } else {
+    recentList.innerHTML = '<li class="text-gray-400">No recent searches</li>';
   }
+}
+
+  const results = await searchWords(query);
+  homeCards.classList.add('hidden');
+  resultArea.classList.remove('hidden');
+  clearSearchBtn.classList.remove('hidden');
+
+  if (results.length === 0) {
+    resultArea.innerHTML = `<p class="text-center text-gray-500 mt-4">No results found</p>`;
+  } else {
+    renderSearchResults(results);
+  }
+}
   
   function renderSearchResults(words) {
     resultArea.innerHTML = '';
