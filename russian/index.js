@@ -95,10 +95,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     resultArea.innerHTML = '';
     words.forEach(word => {
       const card = document.createElement('div');
-      card.className = 'bg-white p-4 rounded-xl shadow mb-3 border cursor-pointer hover:bg-gray-50 transition';
+      card.className = 'bg-white p-4 rounded-xl shadow mb-3 border cursor-pointer hover:bg-gray-50 transition border-[#e8e8e8]';
       card.innerHTML = `
-        <h2 class="text-lg font-semibold text-blue-700">${word.en}</h2>
-        <p class="text-gray-600">${word.ru}</p>
+        <h2 class="text-lg font-semibold text-blue-700 Inter-Bold">${word.en}</h2>
+        <p class="text-gray-600 RobotoCondensed-Regular">${word.ru}</p>
       `;
       card.addEventListener('click', () => {
         window.location.href = `view.html?id=${word.id}`;
