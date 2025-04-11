@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Details</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../tailwind.js"></script>
+  <link rel="stylesheet" href="files/style.css">
+</head>
+<body class="bg-gray-100 min-h-screen text-gray-800">
+  <div class="max-w-xl mx-auto px-4 py-6">
+    <div id="shimmer" class="animate-pulse space-y-4">
+      <div class="bg-white p-6 rounded-2xl shadow-md h-36"></div>
+      <div class="bg-white p-4 rounded-2xl shadow h-20"></div>
+    </div>
+
+    <div id="wordDetails" class="hidden space-y-4">
+      <div class="bg-white p-6 rounded-2xl shadow-md flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-bold Inter-Bold" id="word-en"></h2>
+          <p class="text-xl text-gray-500 RobotoCondensed-Regular" id="word-ru"></p>
+          <p class="text-md text-gray-400" id="word-tr"></p>
+        </div>
+        <button id="bookmarkBtn">
+          <svg id="bookmarkIcon" xmlns="http://www.w3.org/2000/svg" fill="none" class="w-8 h-8 stroke-2 text-blue-500" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 5v16l7-5 7 5V5z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold mb-2 Inter-Bold">Related Words</h3>
+        <div id="relatedWords" class="space-y-2"></div>
+      </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hidden">Bookmarked!</div>
+  </div>
+
+  <script src="db.js"></script>
+  <script src="view.js"></script>
+</body>
+</html>

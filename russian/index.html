@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline Dictionary</title>
+  <script src="../tailwind.js"></script>
+  <link rel="stylesheet" href="files/style.css">
+</head>
+<body class="bg-white min-h-screen p-4">
+  <h1 class="text-2xl font-bold mb-4 Inter-Bold">Offline Dictionary</h1>
+
+  <!-- Search Bar Shimmer -->
+  <div id="searchShimmer" class="flex gap-2 mb-4 animate-pulse">
+    <div class="flex-1 h-10 bg-gray-200 rounded"></div>
+    <div class="w-24 h-10 bg-gray-300 rounded"></div>
+  </div>
+
+  <!-- Search Bar -->
+  <div id="searchBar" class="flex items-center gap-2 mb-4 hidden relative">
+    <div class="relative w-full">
+      <input id="searchInput" type="text" placeholder="Search English or Russian..." class="w-full px-4 py-2 pr-10 border border-[#e8e8e8] rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 IGSans-R" />
+      <button id="clearInput" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
+    </div>
+    <button id="searchBtn" class="shrink-0 px-4 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 transition Inter-Bold">Search</button>
+  </div>
+
+  <!-- Home Cards Shimmer -->
+  <div id="homeShimmer" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+    <div class="h-28 bg-gray-200 rounded-lg animate-pulse"></div>
+    <div class="h-28 bg-gray-200 rounded-lg animate-pulse"></div>
+    <div class="h-28 bg-gray-200 rounded-lg animate-pulse"></div>
+    <div class="h-28 bg-gray-200 rounded-lg animate-pulse"></div>
+  </div>
+
+  <!-- Home Cards -->
+  <div id="homeCards" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 hidden">
+    <!-- Random Word -->
+    <div class="bg-green-50 p-4 rounded-lg border border-[#e8e8e8] cursor-pointer" id="randomWordCard">
+      <h2 class="text-lg font-semibold mb-2 Inter-Bold">Random Word</h2>
+      <div id="randomWord" class="text-sm text-blue-700">Loading...</div>
+    </div>
+
+<!-- Recent Searches -->
+<div class="bg-green-50 p-4 rounded-lg border border-[#e8e8e8]">
+  <h2 class="text-lg font-semibold mb-2 flex justify-between items-center">
+    <span class="Inter-Bold">Bookmarks</span>
+    <a href="bookmark.html" class="text-sm text-blue-500">More</a>
+  </h2>
+  <ul id="bookmarkList" class="space-y-1 text-sm text-gray-700">
+    <li>Loading...</li>
+  </ul>
+</div>
+
+<!-- Recent Searches -->
+<div class="bg-green-50 p-4 rounded-lg border border-[#e8e8e8]">
+  <h2 class="text-lg font-semibold mb-2 flex justify-between items-center">
+    <span class="Inter-Bold">Recent Searches</span>
+    <a href="#" id="clearRecentBtn" class="text-sm text-blue-500">Clear</a>
+  </h2>
+  <ul id="recentList" class="space-y-1 text-sm text-gray-700">
+    <li>Loading...</li>
+  </ul>
+</div>
+
+    <!-- Settings -->
+    <div class="bg-gray-50 p-4 rounded-lg border border-[#e8e8e8]">
+      <h2 class="text-lg font-semibold mb-2 Inter-Bold">Settings</h2>
+      <ul class="space-y-1 text-sm text-gray-700">
+        <li><a href="settings.html" class="text-blue-600">App Settings</a></li>
+        <li><a href="about.html" class="text-blue-600">About</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Search Results -->
+  <div id="searchResults" class="space-y-4 mt-4 hidden"></div>
+
+  <!-- Search Results Shimmer -->
+  <div id="resultShimmer" class="hidden space-y-4 mt-4">
+    <div class="bg-gray-200 animate-pulse h-20 rounded-xl"></div>
+    <div class="bg-gray-200 animate-pulse h-20 rounded-xl"></div>
+    <div class="bg-gray-200 animate-pulse h-20 rounded-xl"></div>
+  </div>
+
+  <!-- Clear Search Button -->
+  <button id="clearSearchBtn" class="mt-4 hidden bg-red-100 text-red-700 px-4 py-2 rounded border border-red-300 text-sm hover:bg-red-200">
+    Clear Search
+  </button>
+
+  <!-- Scripts -->
+  <script src="db.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>

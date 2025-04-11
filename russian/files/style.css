@@ -1,0 +1,35 @@
+@font-face {
+  font-family: "Roboto-Condensed";
+  src: url(RobotoCondensed.ttf);
+}
+
+@font-face {
+  font-family: "Inter-Bold";
+  src: url(Inter-Bold.ttf);
+}
+
+@font-face {
+  font-family: "IGSans-R";
+  src: url(InstagramSans-Regular.woff2);
+}
+
+.RobotoCondensed-Regular {
+  font-family: "Roboto-Condensed";
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.Inter-Bold {
+  font-family: "Inter-Bold";
+  font-weight: bold;
+}
+
+.IGSans-R {
+  font-family: "IGSans-R";
+  font-weight: normal;
+}
+
+* {
+  font-family: "IGSans-R";
+}
