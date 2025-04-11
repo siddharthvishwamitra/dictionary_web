@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Offline Dictionary</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Russian Dictionary</title>
   <script src="../tailwind.js"></script>
   <link rel="stylesheet" href="files/style.css">
 </head>
-<body class="bg-white min-h-screen p-4">
-  <h1 class="text-2xl font-bold mb-4 Inter-Bold">Offline Dictionary</h1>
+<body class="bg-white min-h-screen p-4" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+  <h1 class="text-2xl font-bold mb-4 Inter-Bold">Russian Dictionary<sup class="align-super text-sm text-gray-500 ml-1">Offline</sup></h1>
 
   <!-- Search Bar Shimmer -->
   <div id="searchShimmer" class="flex gap-2 mb-4 animate-pulse">
@@ -19,7 +19,7 @@
   <!-- Search Bar -->
   <div id="searchBar" class="flex items-center gap-2 mb-4 hidden relative">
     <div class="relative w-full">
-      <input id="searchInput" type="text" placeholder="Search English or Russian..." class="w-full px-4 py-2 pr-10 border border-[#e8e8e8] rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 IGSans-R" />
+      <input id="searchInput" type="text" placeholder="Search English or Russian..." class="w-full px-4 py-2 pr-10 border border-[#e8e8e8] rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 IGSans-R" oncontextmenu="event.stopPropagation(); return true;" onselectstart="event.stopPropagation(); return true;" ondragstart="event.stopPropagation(); return true;" required/>
       <button id="clearInput" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xl">&times;</button>
     </div>
     <button id="searchBtn" class="shrink-0 px-4 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 transition Inter-Bold">Search</button>
@@ -85,7 +85,11 @@
 
   <!-- Clear Search Button -->
   <button id="clearSearchBtn" class="mt-4 hidden bg-red-100 text-red-700 px-4 py-2 rounded border border-red-300 text-sm hover:bg-red-200">Clear Search</button>
-
+<script>
+document.getElementById('searchInput').addEventListener('input', function () {
+  this.value = this.value.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s\-'\.,]/g, '');
+});
+</script>
   <!-- Scripts -->
   <script src="db.js"></script>
   <script src="index.js"></script>

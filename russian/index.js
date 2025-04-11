@@ -8,8 +8,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.getElementById('searchBtn');
   const clearInputBtn = document.getElementById('clearInput');
+  const randomWord = document.getElementById('randomWord');
+  const bookmarkList = document.getElementById('bookmarkList');
+  const recentList = document.getElementById('recentList');
+  const clearRecentBtn = document.getElementById('clearRecentBtn');
   
-  // Initial UI loading
   shimmer.classList.remove('hidden');
   shimmerCards.classList.remove('hidden');
   searchBar.classList.add('hidden');
@@ -21,7 +24,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const allWords = await getAllWords();
   
   // Random Word
-  const randomWord = document.getElementById('randomWord');
   if (allWords.length > 0) {
     const random = allWords[Math.floor(Math.random() * allWords.length)];
     randomWord.textContent = `${random.en} — ${random.ru}`;
@@ -30,40 +32,42 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   } else {
     randomWord.textContent = 'No words found';
+    randomWord.classList.add('text-gray-400');
   }
   
   // Bookmarks
   const bookmarks = await getBookmarks();
-  const bookmarkList = document.getElementById('bookmarkList');
   if (bookmarks.length > 0) {
     bookmarkList.innerHTML = bookmarks.slice(0, 5).map(w =>
       `<li class="text-blue-600 hover:underline cursor-pointer" data-id="${w.id}">${w.en} — ${w.ru}</li>`
     ).join('');
   } else {
-    bookmarkList.innerHTML = '<li>No bookmarks</li>';
+    bookmarkList.innerHTML = '<li class="text-gray-400">No bookmarks</li>';
   }
   
-  // Recent
-  const recent = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-  const recentList = document.getElementById('recentList');
-  if (recent.length > 0) {
-    recentList.innerHTML = recent.slice(0, 5).map(term =>
-      `<li class="text-blue-600 hover:underline cursor-pointer" data-term="${term}">${term}</li>`
-    ).join('');
-  } else {
-    recentList.innerHTML = '<li>No recent searches</li>';
+  // Recent Searches
+  function getRecentSearches(limit = 5) {
+    return JSON.parse(localStorage.getItem('recentSearches') || '[]').slice(0, limit);
   }
   
-  const clearRecentBtn = document.getElementById('clearRecentBtn');
-  if (clearRecentBtn) {
-  clearRecentBtn.addEventListener('click', () => {
+  function refreshRecentList() {
+    const recent = getRecentSearches();
+    if (recent.length > 0) {
+      recentList.innerHTML = recent.map(term =>
+        `<li class="text-blue-600 hover:underline cursor-pointer" data-term="${term}">${term}</li>`
+      ).join('');
+    } else {
+      recentList.innerHTML = '<li class="text-gray-400">No recent searches</li>';
+    }
+  }
+  
+  refreshRecentList();
+  
+  clearRecentBtn?.addEventListener('click', () => {
     localStorage.removeItem('recentSearches');
-    const recentList = document.getElementById('recentList');
-    recentList.innerHTML = '<li class="text-gray-400">No recent searches</li>';
+    refreshRecentList();
   });
-}
   
-  // Show UI
   setTimeout(() => {
     shimmer.classList.add('hidden');
     shimmerCards.classList.add('hidden');
@@ -71,38 +75,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     homeCards.classList.remove('hidden');
   }, 500);
   
-  // Search logic
-async function handleSearch(query = searchInput.value.trim().toLowerCase()) {
-  if (!query) return;
-
-  let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-  recentSearches = [query, ...recentSearches.filter(q => q !== query)].slice(0, 10);
-  localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
-  refreshRecentList();
-  
-  function refreshRecentList() {
-  const recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
-  const recentList = document.getElementById('recentList');
-  if (recentSearches.length > 0) {
-    recentList.innerHTML = recentSearches.slice(0, 5).map(term =>
-      `<li class="text-blue-600 hover:underline cursor-pointer" data-term="${term}">${term}</li>`
-    ).join('');
-  } else {
-    recentList.innerHTML = '<li class="text-gray-400">No recent searches</li>';
+  async function handleSearch(query = searchInput.value.trim().toLowerCase()) {
+    if (!query) return;
+    
+    let recentSearches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+    recentSearches = [query, ...recentSearches.filter(q => q !== query)].slice(0, 10);
+    localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+    refreshRecentList();
+    
+    const results = await searchWords(query);
+    homeCards.classList.add('hidden');
+    resultArea.classList.remove('hidden');
+    clearSearchBtn.classList.remove('hidden');
+    
+    if (results.length === 0) {
+      resultArea.innerHTML = `<p class="text-center text-gray-500 mt-4">No results found</p>`;
+    } else {
+      renderSearchResults(results);
+    }
   }
-}
-
-  const results = await searchWords(query);
-  homeCards.classList.add('hidden');
-  resultArea.classList.remove('hidden');
-  clearSearchBtn.classList.remove('hidden');
-
-  if (results.length === 0) {
-    resultArea.innerHTML = `<p class="text-center text-gray-500 mt-4">No results found</p>`;
-  } else {
-    renderSearchResults(results);
-  }
-}
   
   function renderSearchResults(words) {
     resultArea.innerHTML = '';
@@ -120,7 +111,6 @@ async function handleSearch(query = searchInput.value.trim().toLowerCase()) {
     });
   }
   
-  // Event Listeners
   searchBtn.addEventListener('click', () => handleSearch());
   searchInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') handleSearch();
@@ -148,17 +138,18 @@ async function handleSearch(query = searchInput.value.trim().toLowerCase()) {
     }
   });
   
-  // Delegate bookmarks & recent
   bookmarkList.addEventListener('click', (e) => {
-    if (e.target.dataset.id) {
-      window.location.href = `view.html?id=${e.target.dataset.id}`;
+    const id = e.target.dataset.id;
+    if (id) {
+      window.location.href = `view.html?id=${id}`;
     }
   });
   
   recentList.addEventListener('click', (e) => {
-    if (e.target.dataset.term) {
-      searchInput.value = e.target.dataset.term;
-      handleSearch(e.target.dataset.term);
+    const term = e.target.dataset.term;
+    if (term) {
+      searchInput.value = term;
+      handleSearch(term);
     }
   });
 });
