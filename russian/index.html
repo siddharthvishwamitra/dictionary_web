@@ -7,7 +7,9 @@
   <script src="../tailwind.js"></script>
   <link rel="stylesheet" href="files/style.css">
 </head>
-<body class="bg-white min-h-screen p-4" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+<body class="bg-white min-h-screen" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">
+  
+<div class="sticky top-0 p-4 bg-white pb-0">
   <h1 class="text-2xl font-bold mb-4 Inter-Bold">Russian Dictionary<sup class="align-super text-sm text-gray-500 ml-1">Offline</sup></h1>
 
   <!-- Search Bar Shimmer -->
@@ -24,7 +26,8 @@
     </div>
     <button id="searchBtn" class="shrink-0 px-4 py-2 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 transition Inter-Bold">Search</button>
   </div>
-
+</div> <!-- sticky ends -->
+<div class="container p-4">
   <!-- Home Cards Shimmer -->
   <div id="homeShimmer" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
     <div class="h-28 bg-gray-200 rounded-lg animate-pulse"></div>
