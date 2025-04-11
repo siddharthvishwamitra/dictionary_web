@@ -81,6 +81,15 @@ async function renderWord(word) {
   }, 500);
 }
 
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const text = wordRu.textContent;
+  if (text) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast('Copied!');
+    });
+  }
+});
+
 async function loadWord(newId) {
   history.replaceState({}, '', `?id=${newId}`);
   const newWord = await getWordById(newId);
