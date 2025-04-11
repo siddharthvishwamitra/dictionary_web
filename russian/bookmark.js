@@ -19,7 +19,7 @@ async function loadBookmarks() {
     
     bookmarks.forEach(word => {
       const card = document.createElement('div');
-      card.className = 'bg-[#fdfdfd] border border-[#e8e8e8] rounded-2xl p-4 shadow-sm hover:shadow-md transition cursor-pointer relative mb-4';
+      card.className = 'bg-green-50 p-4 rounded-lg border border-[#e8e8e8] transition cursor-pointer relative mb-4';
       card.onclick = () => {
         history.replaceState(null, '', `view.html?id=${word.id}`);
         window.location.href = `view.html?id=${word.id}`;

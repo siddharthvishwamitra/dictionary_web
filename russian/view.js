@@ -78,7 +78,7 @@ async function renderWord(word) {
   setTimeout(() => {
     shimmer.classList.add('hidden');
     details.classList.remove('hidden');
-  }, 1000);
+  }, 500);
 }
 
 async function loadWord(newId) {
