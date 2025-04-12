@@ -1,15 +1,17 @@
-document.addEventListener('DOMContentLoaded', loadBookmarks);
+document.addEventListener('DOMContentLoaded', () => loadBookmarks(true));
 
-async function loadBookmarks() {
+async function loadBookmarks(showShimmer = true) {
   const container = document.getElementById('bookmark-list');
   const shimmer = document.getElementById('shimmer');
   
-  shimmer.classList.remove('hidden');
+  if (showShimmer) {
+    shimmer.classList.remove('hidden');
+  }
   container.innerHTML = '';
   
   const bookmarks = await getBookmarks();
   
-  setTimeout(() => {
+  const render = () => {
     shimmer.classList.add('hidden');
     
     if (bookmarks.length === 0) {
@@ -40,17 +42,40 @@ async function loadBookmarks() {
       `;
       container.appendChild(card);
     });
-  }, 500);
+  };
+  
+  if (showShimmer) {
+    setTimeout(render, 500);
+  } else {
+    render();
+  }
+}
+
+async function getBookmarks() {
+  const db = await openDB();
+  const tx = db.transaction('bookmarks', 'readonly');
+  const store = tx.objectStore('bookmarks');
+  const bookmarks = [];
+  
+  return new Promise((resolve) => {
+    const request = store.openCursor(null, 'prev'); // Newest first
+    request.onsuccess = (event) => {
+      const cursor = event.target.result;
+      if (cursor) {
+        bookmarks.push(cursor.value);
+        cursor.continue();
+      } else {
+        resolve(bookmarks);
+      }
+    };
+  });
 }
 
 async function removeBookmark(id) {
-  const container = document.getElementById('bookmark-list');
-  
   const db = await openDB();
   const tx = db.transaction('bookmarks', 'readwrite');
   tx.objectStore('bookmarks').delete(Number(id));
   await tx.complete;
   
-  // Reload the list without shimmer
-  loadBookmarks();
+  loadBookmarks(false);
 }
